@@ -9,7 +9,6 @@
 TRADEHISTORY/
 ├── CODES/
 │   ├── 0fx.py               # 為替データをダウンロードするスクリプト
-│   ├── 0VIEW.PY             # CSVファイルのヘッダーを表示するスクリプト
 │   ├── 1concat.py           # CSVファイルを統合するスクリプト
 │   ├── 2clean.py            # データをクリーンアップするスクリプト
 │   ├── 3eda.py              # EDAを実施するスクリプト
@@ -19,20 +18,9 @@ TRADEHISTORY/
 ├── RAWDATA/                 # 生データを格納するフォルダ
 │   ├── rakuten/             # 楽天の取引データ
 │   ├── sbi/                 # SBI証券の取引データ
-├── note.md                  # CSVファイル統合プランの概要
-└── note2.md                 # CSVファイル統合プランの詳細
 ```
 
 ## 必要なライブラリ
-このプロジェクトを実行するには、以下のPythonライブラリが必要です。
-- pandas
-- numpy
-- matplotlib
-- seaborn
-- yfinance
-- chardet
-
-これらは、以下のコマンドでインストールできます。
 ```bash
 pip install pandas numpy matplotlib seaborn yfinance chardet
 ```
