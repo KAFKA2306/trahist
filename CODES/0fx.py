@@ -71,3 +71,6 @@ else:
     print(f"Date range: from {df.index.min()} to {df.index.max()}")
 
 print("Script execution completed.")
+
+
+

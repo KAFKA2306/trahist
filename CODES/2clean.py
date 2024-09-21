@@ -149,3 +149,19 @@ for col in ['currency', 'transaction_type', 'account_type', 'security_code']:
     print(df[col].value_counts(dropna=False))
 
 print(f"\nCleaned and integrated data saved to {output_file}")
+
+
+
+# security_codeごとのデータに整形
+df_grouped = df.groupby('security_code').agg({
+    'quantity': 'sum',
+    'price': 'mean',
+    'settlement_amount': 'sum',
+    'amount_jpy': 'sum'
+}).reset_index()
+
+# 整形したデータを出力
+output_grouped_file = os.path.join(base_path, "grouped_trade_history.csv")
+df_grouped.to_csv(output_grouped_file, index=False)
+
+print(f"\nGrouped data saved to {output_grouped_file}")

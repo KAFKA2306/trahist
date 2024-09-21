@@ -190,6 +190,15 @@ data = {}
 for code in top_securities:
     data[code] = yf.download(code, start='2022-01-01', end='2023-01-01')
 
+# 追加: security_codeごとのデータを整形して出力
+formatted_data = pd.DataFrame()
+for code in top_securities:
+    if code in data:
+        formatted_data[code] = data[code]['Close']
+
+# 整形したデータをCSVとして保存
+formatted_data.to_csv(os.path.join(output_folder, 'security_code_data.csv'))
+
 # プロット
 plt.figure(figsize=(14, 7))
 for code in top_securities:
