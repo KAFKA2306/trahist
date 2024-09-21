@@ -62,7 +62,7 @@ def analyze_stock_transactions(trade_history_path, adj_close_data_path):
     return df_results
 
 # 使用例
-trade_history_path = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history3.csv'
+trade_history_path = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history4.csv'
 adj_close_data_path = r'C:\Users\100ca\Documents\PyCode\trahist\DIC\charts.csv'
 
 result_table = analyze_stock_transactions(trade_history_path, adj_close_data_path)

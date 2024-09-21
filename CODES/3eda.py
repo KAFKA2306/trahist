@@ -6,7 +6,7 @@ import numpy as np
 import yfinance as yf
 
 # File path
-cleaned_file = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history3.csv'
+cleaned_file = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history4.csv'
 
 # Output folder
 output_folder = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\EDA_results'
@@ -180,7 +180,7 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 
 # 取引データの読み込み
-df = pd.read_csv(r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history3.csv')
+df = pd.read_csv(r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history4.csv')
 
 # security_codeごとの取引額を計算
 top_securities = df.groupby('security_code')['amount_jpy'].sum().nlargest(5).index.tolist()
@@ -217,7 +217,7 @@ import matplotlib.pyplot as plt
 import os
 
 # 1. データの読み込み
-file_path = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history3.csv'
+file_path = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history4.csv'
 df = pd.read_csv(file_path)
 print("データの読み込みが完了しました。")
 

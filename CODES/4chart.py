@@ -1,20 +1,33 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
+import logging
+
+# ロギングの設定
+logging.basicConfig(filename='plot_log.txt', level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+def normalize_code(code):
+    if pd.isna(code):
+        return None
+    code = str(code).strip().upper()
+    return code.rstrip('.JP').rstrip('.T')
 
 def load_data(trade_history_path, adj_close_data_path):
     trade_history = pd.read_csv(trade_history_path, parse_dates=['trade_date'])
+    trade_history['security_code'] = trade_history['security_code'].apply(normalize_code)
+    
     adj_close_data = pd.read_csv(adj_close_data_path, index_col=0, parse_dates=True)
+    adj_close_data.columns = [normalize_code(col) for col in adj_close_data.columns]
+    
     return trade_history, adj_close_data
-
-import matplotlib.pyplot as plt
 
 def generate_combined_chart(trade_history, adj_close_data, security_code, output_folder):
     security_trades = trade_history[trade_history['security_code'] == security_code]
-    adj_close = adj_close_data.get(str(security_code))
-    if adj_close is None:
-        
-        print(f"No adjusted close data found for {security_code}")
+    adj_close = adj_close_data.get(security_code)
+    
+    if adj_close is None or adj_close.empty:
+        logging.warning(f"No adjusted close data found for {security_code}")
         return
 
     fig, ax1 = plt.subplots(figsize=(14, 8))
@@ -28,8 +41,8 @@ def generate_combined_chart(trade_history, adj_close_data, security_code, output
 
     max_amount = security_trades['amount_jpy'].max()
     for _, trade in security_trades.iterrows():
-        color, marker = ('g', '^') if trade['transaction_type'] == 'Buy' else ('r', 'v')
-#color, marker = ('g', '^') if trade['transaction_type'] == 'Buy' else ('r', 'v') if trade['transaction_type'] == 'Sell' else ('k', 'o')
+        color = 'g' if trade['transaction_type'].lower() == 'buy' else 'r'
+        marker = '^' if trade['transaction_type'].lower() == 'buy' else 'v'
         size = 50 * (trade['amount_jpy'] / max_amount) + 20
         ax2.scatter(trade['trade_date'], trade['amount_jpy'], c=color, marker=marker, s=size, alpha=0.7, zorder=5)
         ax1.axvline(x=trade['trade_date'], color='gray', alpha=0.3, linestyle='--', zorder=1)
@@ -45,22 +58,26 @@ def generate_combined_chart(trade_history, adj_close_data, security_code, output
     output_file = output_folder / f'{security_code}.png'
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f"Chart for {security_code} saved to {output_file}")    
+    logging.info(f"Chart for {security_code} saved to {output_file}")
+
 def main():
-    trade_history_path = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history3.csv'
+    trade_history_path = r'C:\Users\100ca\Documents\PyCode\TRADEHISTORY\trade_history4.csv'
     adj_close_data_path = r'C:\Users\100ca\Documents\PyCode\trahist\DIC\charts.csv'
     output_folder = Path(r'C:\Users\100ca\Documents\PyCode\trahist\charts')
     output_folder.mkdir(parents=True, exist_ok=True)
 
     trade_history, adj_close_data = load_data(trade_history_path, adj_close_data_path)
 
-    # Get unique security codes
-    security_codes = trade_history['security_code'].unique()
+    security_codes = trade_history['security_code'].dropna().unique()
 
     for security_code in security_codes:
-        generate_combined_chart(trade_history, adj_close_data, security_code, output_folder)
+        try:
+            generate_combined_chart(trade_history, adj_close_data, security_code, output_folder)
+        except Exception as e:
+            logging.error(f"Error generating chart for {security_code}: {str(e)}")
 
-    print("All charts have been generated.")
+    logging.info("All charts have been generated.")
+    print("All charts have been generated. Check plot_log.txt for details.")
 
 if __name__ == "__main__":
     main()
