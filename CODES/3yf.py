@@ -21,6 +21,7 @@ codes = df['security_code'].apply(process_code).dropna().unique().tolist()
 
 # 日付範囲を設定（今日から5年前まで）
 end_date = datetime.now()
+print(end_date)
 start_date = end_date - timedelta(days=365*5)
 
 # データをダウンロード（エラーを無視）
@@ -33,6 +34,10 @@ adj_close_data = data['Adj Close'].copy()
 adj_close_data.columns = adj_close_data.columns.str.rstrip('.T')
 adj_close_data = adj_close_data.dropna(axis=1, how='all')
 
+
+print(adj_close_data.tail(1))
+
+
 # CSVファイルに保存
 output_path = r'C:\Users\100ca\Documents\PyCode\trahist\DIC\charts.csv'
 print(adj_close_data)
@@ -41,9 +46,5 @@ print(f"サンプル列: {list(adj_close_data.columns)[:10]}")
 print(f"ダウンロードに失敗した銘柄: {set(codes) - set(adj_close_data.columns)}")
 print(f"データは {output_path} に保存されました。")
 
-# 1489の確認
-if '1489' in adj_close_data.columns:
-    print("\n1489のデータ:")
-    print(adj_close_data['1489'].head())
-else:
-    print("\n1489のデータは取得できませんでした。")
+
+adj_close_data.to_csv(output_path)

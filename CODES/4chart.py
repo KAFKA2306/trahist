@@ -35,8 +35,9 @@ def generate_combined_chart(args):
     trade_history, adj_close_data, security_code, output_folder = args
     try:
         # 2023年末までの取引データのみをフィルタリング
-        security_trades = trade_history[(trade_history['security_code'] == security_code) & 
-                                        (trade_history['trade_date'] <= '2023-12-31')]
+        security_trades = trade_history[(trade_history['security_code'] == security_code)  
+                                        #& (trade_history['trade_date'] <= '2023-12-31')
+                                        ]
         adj_close = adj_close_data.get(security_code)
         
         if adj_close is None or adj_close.empty:
